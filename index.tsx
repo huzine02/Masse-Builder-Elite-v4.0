@@ -538,5 +538,42 @@ const App = () => {
   );
 };
 
+
+class ErrorBoundary extends React.Component<{children: React.ReactNode}, {hasError: boolean, error: any}> {
+  constructor(props: any) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+  static getDerivedStateFromError(error: any) {
+    return { hasError: true, error };
+  }
+  componentDidCatch(error: any, errorInfo: any) {
+    console.error("Uncaught error:", error, errorInfo);
+  }
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="p-10 text-red-500 font-mono text-sm bg-black h-screen overflow-auto">
+          <h1 className="text-xl font-bold mb-4">Erreur d'application</h1>
+          <div className="border border-red-900 p-4 rounded bg-red-900/10">
+             <p className="font-bold">{this.state.error?.toString()}</p>
+             <pre className="mt-4 whitespace-pre-wrap text-[10px] text-red-400">{this.state.error?.stack}</pre>
+          </div>
+          <button onClick={() => { localStorage.clear(); window.location.reload(); }} className="mt-8 bg-red-800 text-white px-6 py-3 rounded-lg font-bold uppercase text-xs">
+             Réinitialiser l'application (Vide le cache)
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 const root = ReactDOM.createRoot(document.getElementById('root')!);
-root.render(<App />);
+root.render(
+  <React.StrictMode>
+    <ErrorBoundary>
+      <App />
+    </ErrorBoundary>
+  </React.StrictMode>
+);
