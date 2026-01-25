@@ -1,0 +1,7 @@
+{
+  "name": "Masse Builder Elite v4.0",
+  "description": "Application de musculation avancée avec suivi S-1, McGill Big 3, Plate Calc et Volume real-time.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
